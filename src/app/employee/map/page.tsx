@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-const MapComponent = dynamic(() => import('../admin/map/MapComponent'), {
+const MapComponent = dynamic(() => import('../../admin/map/MapComponent'), {
     ssr: false,
     loading: () => <div className="flex h-full items-center justify-center">Loading Map...</div>,
 });
