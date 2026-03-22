@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { EmployeeService, Employee } from '@/services/employeeService';
-import { Search, UserPlus, MapPin, Edit, Trash2, Ban, MessageCircle, Award, ArrowLeft, Plus, Minus, X } from 'lucide-react';
+import { Search, UserPlus, MapPin, Edit, Trash2, Ban, MessageCircle, Award, ArrowLeft, Plus, Minus, X, Users, Code, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EmployeesPage() {
@@ -39,7 +39,7 @@ export default function EmployeesPage() {
     const filteredEmployees = employees.filter(e =>
         e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         e.phone.includes(searchTerm) ||
-        e.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        (e.email && e.email.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const handleDelete = (employee: Employee) => {
@@ -89,245 +89,243 @@ export default function EmployeesPage() {
     };
 
     return (
-        <div className="flex h-screen flex-col bg-gray-100">
-            {/* Header */}
-            <div className="flex items-center justify-between bg-white px-6 py-4 shadow-sm">
+        <div className="flex h-screen flex-col bg-[#F3F6F8] font-sans text-gray-800 overflow-hidden">
+            {/* Advanced Header */}
+            <div className="flex items-center justify-between bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4 shadow-lg shrink-0 rounded-b-3xl z-10">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin" className="p-2 rounded-full hover:bg-gray-100">
-                        <ArrowLeft className="h-6 w-6 text-gray-600" />
+                    <Link href="/admin" className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-md border border-white/10 shadow-sm text-white">
+                        <ArrowLeft className="h-6 w-6" />
                     </Link>
-                    <h1 className="text-xl font-bold text-green-700">Employee Management</h1>
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl shadow-inner flex items-center justify-center border border-white/20">
+                            <Users className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-black text-white tracking-tight">Employee Hub</h1>
+                            <p className="text-xs text-gray-400 font-medium">Manage team members & commission</p>
+                        </div>
+                    </div>
                 </div>
                 <Link
                     href="/admin/employees/add"
-                    className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
+                    className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 border border-indigo-400 hover:-translate-y-0.5 hover:shadow-xl transition-all"
                 >
-                    <UserPlus className="h-4 w-4" />
-                    Add Employee
+                    <UserPlus className="h-5 w-5" />
+                    <span className="hidden sm:inline">Add Member</span>
                 </Link>
             </div>
 
-            {/* Statistics */}
-            <div className="bg-white border-b px-6 py-4">
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div className="bg-blue-50 rounded-lg p-4">
-                        <p className="text-sm text-blue-600 font-medium">Total</p>
-                        <p className="text-2xl font-bold text-blue-700">{stats.total}</p>
-                    </div>
-                    <div className="bg-green-50 rounded-lg p-4">
-                        <p className="text-sm text-green-600 font-medium">Active</p>
-                        <p className="text-2xl font-bold text-green-700">{stats.active}</p>
-                    </div>
-                    <div className="bg-gray-50 rounded-lg p-4">
-                        <p className="text-sm text-gray-600 font-medium">Inactive</p>
-                        <p className="text-2xl font-bold text-gray-700">{stats.inactive}</p>
-                    </div>
-                    <div className="bg-red-50 rounded-lg p-4">
-                        <p className="text-sm text-red-600 font-medium">Blocked</p>
-                        <p className="text-2xl font-bold text-red-700">{stats.blocked}</p>
-                    </div>
-                    <div className="bg-purple-50 rounded-lg p-4">
-                        <p className="text-sm text-purple-600 font-medium">Total Commission</p>
-                        <p className="text-2xl font-bold text-purple-700">₹{stats.totalCommission.toLocaleString()}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Search */}
-            <div className="px-6 py-4 bg-white border-b">
-                <div className="relative max-w-2xl">
-                    <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Search employees by name, phone, or email..."
-                        className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 focus:border-green-500 focus:outline-none"
-                    />
-                </div>
-            </div>
-
-            {/* Employee List */}
-            <div className="flex-1 overflow-auto p-6">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {filteredEmployees.map((employee) => (
-                        <div key={employee.id} className="rounded-xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold text-lg">
-                                        {employee.name[0]}
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-gray-900">{employee.name}</h3>
-                                        <p className="text-sm text-gray-500">{employee.phone}</p>
-                                    </div>
-                                </div>
-                                <div className={`rounded-full px-2 py-0.5 text-xs font-medium ${employee.status === 'active' ? 'bg-green-100 text-green-700' :
-                                    employee.status === 'inactive' ? 'bg-gray-100 text-gray-600' :
-                                        'bg-red-100 text-red-700'
-                                    }`}>
-                                    {employee.status}
-                                </div>
-                            </div>
-
-                            <div className="space-y-2 text-sm text-gray-600 mb-4">
-                                {employee.email && <p>📧 {employee.email}</p>}
-                                {employee.village && <p>📍 {employee.village}</p>}
-                                <p>👥 Assigned: {employee.assignedFarmers.length} farmers</p>
-                                <p className="font-semibold text-purple-600">💰 Commission: ₹{employee.commissionPoints.toLocaleString()}</p>
-                            </div>
-
-                            <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
-                                <Link
-                                    href={`/admin/employees/edit/${employee.id}`}
-                                    className="flex-1 flex justify-center items-center gap-2 rounded-lg bg-blue-50 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
-                                >
-                                    <Edit className="h-4 w-4" />
-                                    Edit
-                                </Link>
-                                <Link
-                                    href={`/admin/employees/${employee.id}/location`}
-                                    className="flex-1 flex justify-center items-center gap-2 rounded-lg bg-green-50 py-2 text-sm font-medium text-green-700 hover:bg-green-100"
-                                >
-                                    <MapPin className="h-4 w-4" />
-                                    Location
-                                </Link>
-                                <Link
-                                    href={`/chat/${employee.id}`}
-                                    className="flex-1 flex justify-center items-center gap-2 rounded-lg bg-purple-50 py-2 text-sm font-medium text-purple-700 hover:bg-purple-100"
-                                >
-                                    <MessageCircle className="h-4 w-4" />
-                                    Chat
-                                </Link>
-                                <button
-                                    onClick={() => openCommissionModal(employee, 'add')}
-                                    className="p-2 rounded-lg hover:bg-green-50"
-                                    title="Add Commission"
-                                >
-                                    <Award className="h-4 w-4 text-green-600" />
-                                </button>
-                                <button
-                                    onClick={() => toggleStatus(employee)}
-                                    className="p-2 rounded-lg hover:bg-gray-100"
-                                    title={employee.status === 'active' ? 'Deactivate' : 'Activate'}
-                                >
-                                    <Ban className={`h-4 w-4 ${employee.status === 'active' ? 'text-orange-600' : 'text-green-600'}`} />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(employee)}
-                                    className="p-2 rounded-lg hover:bg-red-50"
-                                    title="Delete"
-                                >
-                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                </button>
-                            </div>
+            <div className="flex-1 overflow-auto">
+                <div className="p-6 pb-2 space-y-6">
+                    {/* Advanced Stats Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-0">
+                        <div className="bg-white rounded-3xl p-5 shadow-sm border border-indigo-50 flex items-center gap-4 group hover:shadow-xl hover:scale-[1.02] transition-all">
+                            <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center"><Users className="w-6 h-6 text-indigo-600"/></div>
+                            <div><p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-tight">Total</p><p className="text-2xl font-black text-indigo-900 drop-shadow-sm">{stats.total}</p></div>
                         </div>
-                    ))}
-                </div>
-
-                {filteredEmployees.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No employees found</p>
-                        <Link
-                            href="/admin/employees/add"
-                            className="inline-flex items-center gap-2 mt-4 text-green-600 hover:text-green-700 font-medium"
-                        >
-                            <UserPlus className="h-5 w-5" />
-                            Add your first employee
-                        </Link>
+                        <div className="bg-white rounded-3xl p-5 shadow-sm border border-emerald-50 flex items-center gap-4 group hover:shadow-xl hover:scale-[1.02] transition-all">
+                            <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center"><UserPlus className="w-6 h-6 text-emerald-600"/></div>
+                            <div><p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-tight">Active</p><p className="text-2xl font-black text-emerald-700 drop-shadow-sm">{stats.active}</p></div>
+                        </div>
+                        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex items-center gap-4 group hover:shadow-xl hover:scale-[1.02] transition-all">
+                            <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center"><Calendar className="w-6 h-6 text-gray-500"/></div>
+                            <div><p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-tight">Inactive</p><p className="text-2xl font-black text-gray-700 drop-shadow-sm">{stats.inactive}</p></div>
+                        </div>
+                        <div className="bg-white rounded-3xl p-5 shadow-sm border border-rose-50 flex items-center gap-4 group hover:shadow-xl hover:scale-[1.02] transition-all">
+                            <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center"><Ban className="w-6 h-6 text-rose-600"/></div>
+                            <div><p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-tight">Blocked</p><p className="text-2xl font-black text-rose-700 drop-shadow-sm">{stats.blocked}</p></div>
+                        </div>
+                        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-5 shadow-lg shadow-indigo-500/30 flex items-center gap-4 group hover:shadow-xl hover:scale-[1.02] transition-all text-white border border-indigo-400 relative overflow-hidden">
+                            <div className="absolute -right-4 -bottom-4 opacity-10"><Award className="w-24 h-24"/></div>
+                            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm relative z-10"><Award className="w-6 h-6 text-white"/></div>
+                            <div className="relative z-10"><p className="text-xs font-bold text-indigo-200 uppercase tracking-widest leading-tight">Total payouts</p><p className="text-2xl font-black drop-shadow-md">₹{stats.totalCommission}</p></div>
+                        </div>
                     </div>
-                )}
+
+                    {/* Advanced Search Bar */}
+                    <div className="relative max-w-3xl mx-auto shadow-sm rounded-2xl group">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <Search className="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
+                        </div>
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="🔍 Type a name, email or phone to search..."
+                            className="block w-full pl-11 pr-4 py-4 bg-white border-0 rounded-2xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 font-bold text-[15px] transition-all shadow-sm"
+                        />
+                    </div>
+
+                    {/* Employee Grid */}
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pb-8">
+                        {filteredEmployees.map((employee) => (
+                            <div key={employee.id} className="relative rounded-[2rem] bg-white p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all border border-gray-100 group overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform"></div>
+                                <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-indigo-400 to-violet-600"></div>
+
+                                <div className="flex items-start justify-between mb-5 pl-2">
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700 font-black text-2xl shadow-inner border border-indigo-200">
+                                            {employee.name[0]}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-black text-gray-900 text-lg tracking-tight">{employee.name}</h3>
+                                            <p className="text-xs font-bold text-gray-500">{employee.phone}</p>
+                                        </div>
+                                    </div>
+                                    <div className={`rounded-lg px-3 py-1 text-xs font-black uppercase tracking-wider ${employee.status === 'active' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' :
+                                        employee.status === 'inactive' ? 'bg-gray-100 text-gray-600 border border-gray-200' :
+                                            'bg-rose-100 text-rose-700 border border-rose-200'
+                                        }`}>
+                                        {employee.status}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3 mb-6 bg-gray-50/80 rounded-2xl p-4 border border-gray-100 shadow-inner ml-2">
+                                    {employee.email && <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">📧 {employee.email}</p>}
+                                    {employee.village && <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">📍 {employee.village}</p>}
+                                    <p className="text-sm font-bold text-indigo-700 flex items-center gap-2">👥 Assigned: {employee.assignedFarmers.length} farmers</p>
+                                    <p className="text-sm font-black text-purple-700 flex items-center gap-2">💰 Commission: ₹{employee.commissionPoints}</p>
+                                </div>
+
+                                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-50 pl-2">
+                                    <button
+                                        onClick={() => window.open(`https://wa.me/918208640382?text=Hello%20Support,%20regarding%20employee%20${employee.name}`, '_blank')}
+                                        className="flex-1 min-w-[140px] flex justify-center items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 py-3 text-sm font-bold text-white shadow-md shadow-green-500/30 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                                    >
+                                        <MessageCircle className="h-4 w-4" /> Message WA
+                                    </button>
+
+                                    <Link
+                                        href={`/admin/employees/edit/${employee.id}`}
+                                        className="w-12 flex justify-center items-center rounded-xl bg-gray-50 border border-gray-200 p-2.5 text-gray-600 hover:bg-white hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm" title="Edit"
+                                    >
+                                        <Edit className="h-5 w-5" />
+                                    </Link>
+                                    
+                                    <Link
+                                        href={`/admin/employees/${employee.id}/location`}
+                                        className="w-12 flex justify-center items-center rounded-xl bg-gray-50 border border-gray-200 p-2.5 text-gray-600 hover:bg-white hover:text-teal-600 hover:border-teal-200 transition-colors shadow-sm" title="Location"
+                                    >
+                                        <MapPin className="h-5 w-5" />
+                                    </Link>
+
+                                    <button
+                                        onClick={() => openCommissionModal(employee, 'add')}
+                                        className="w-12 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center hover:bg-purple-100 hover:border-purple-200 hover:text-purple-700 transition-colors shadow-sm text-gray-600"
+                                        title="Manage Commission"
+                                    >
+                                        <Award className="h-5 w-5" />
+                                    </button>
+                                    
+                                    <button
+                                        onClick={() => toggleStatus(employee)}
+                                        className={`w-12 rounded-xl border shadow-sm flex items-center justify-center p-2.5 transition-colors ${employee.status === 'active' ? 'border-orange-200 bg-orange-50 hover:bg-orange-100 text-orange-600' : 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-600'}`}
+                                        title={employee.status === 'active' ? 'Deactivate' : 'Activate'}
+                                    >
+                                        <Ban className="h-5 w-5" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(employee)}
+                                        className="w-12 rounded-xl border border-red-200 bg-red-50 flex justify-center items-center hover:bg-red-100 text-red-600 transition-colors shadow-sm"
+                                        title="Delete Employee"
+                                    >
+                                        <Trash2 className="h-5 w-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {filteredEmployees.length === 0 && (
+                        <div className="text-center py-20 bg-white rounded-[2rem] shadow-sm border border-gray-100">
+                            <Users className="h-20 w-20 text-gray-200 mx-auto mb-6" />
+                            <h3 className="text-2xl font-black text-gray-800 tracking-tight">No employees found</h3>
+                            <Link
+                                href="/admin/employees/add"
+                                className="inline-flex items-center gap-2 mt-4 text-indigo-600 hover:text-indigo-800 font-bold bg-indigo-50 px-6 py-3 rounded-xl hover:bg-indigo-100 transition-colors"
+                            >
+                                <UserPlus className="h-5 w-5" />
+                                Add your first employee
+                            </Link>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Commission Management Modal */}
+            {/* Advanced Commission Management Modal */}
             {showCommissionModal && selectedEmployee && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowCommissionModal(false)}>
-                    <div className="w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-6 border-b">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-bold">
-                                    {commissionType === 'add' ? 'Add' : 'Subtract'} Commission
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm" onClick={() => setShowCommissionModal(false)}>
+                    <div className="w-full max-w-md mx-4 bg-white rounded-[2rem] shadow-2xl relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
+                        <div className="p-8 pb-6 border-b border-gray-100">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-2xl font-black text-gray-800 tracking-tight flex items-center gap-3">
+                                    <div className="bg-purple-100 p-2.5 rounded-xl"><Award className="w-6 h-6 text-purple-600"/></div>
+                                    Commission
                                 </h2>
-                                <button onClick={() => setShowCommissionModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-                                    <X className="h-5 w-5" />
+                                <button onClick={() => setShowCommissionModal(false)} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                                    <X className="h-5 w-5 text-gray-600" />
                                 </button>
                             </div>
-                            <p className="text-sm text-gray-600 mt-1">
-                                Employee: <strong>{selectedEmployee.name}</strong>
-                            </p>
-                            <p className="text-sm text-gray-600">
-                                Current Commission: <strong>₹{selectedEmployee.commissionPoints.toLocaleString()}</strong>
-                            </p>
+                            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                <p className="text-sm font-bold text-gray-500 mb-1 tracking-widest uppercase">Target Member</p>
+                                <p className="text-xl font-black text-gray-800">{selectedEmployee.name}</p>
+                                <div className="mt-3 flex items-center justify-between">
+                                    <span className="text-sm font-semibold text-gray-500">Current Payouts</span>
+                                    <span className="text-lg font-black text-purple-700 bg-purple-100 px-3 py-1 rounded-lg">₹{selectedEmployee.commissionPoints}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="p-6 space-y-4">
-                            {/* Type Selection */}
+                        <div className="p-8 pt-6 space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Transaction Type
-                                </label>
-                                <div className="flex gap-2">
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-widest">Transaction Type</label>
+                                <div className="flex gap-3">
                                     <button
                                         onClick={() => setCommissionType('add')}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2 font-medium ${commissionType === 'add' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700'
-                                            }`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3.5 font-bold shadow-sm transition-all focus:ring-2 focus:ring-emerald-400 focus:outline-none ${commissionType === 'add' ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-green-500/30' : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'}`}
                                     >
-                                        <Plus className="h-4 w-4" />
-                                        Add
+                                        <Plus className="h-5 w-5 group-active:scale-90" /> Grant
                                     </button>
                                     <button
                                         onClick={() => setCommissionType('subtract')}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2 font-medium ${commissionType === 'subtract' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700'
-                                            }`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3.5 font-bold shadow-sm transition-all focus:ring-2 focus:ring-red-400 focus:outline-none ${commissionType === 'subtract' ? 'bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-red-500/30' : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'}`}
                                     >
-                                        <Minus className="h-4 w-4" />
-                                        Subtract
+                                        <Minus className="h-5 w-5 group-active:scale-90" /> Deduct
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Amount */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Amount (₹) <span className="text-red-500">*</span>
-                                </label>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-widest">Amount (₹) <span className="text-rose-500">*</span></label>
                                 <input
                                     type="number"
                                     value={commissionAmount}
                                     onChange={(e) => setCommissionAmount(e.target.value)}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-500 focus:outline-none"
-                                    placeholder="Enter amount"
+                                    className="w-full rounded-xl border border-gray-200 px-4 py-3.5 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 font-bold text-[15px] text-gray-900 transition-all shadow-sm outline-none bg-white"
+                                    placeholder="e.g. 5000"
                                     min="0"
                                 />
                             </div>
 
-                            {/* Reason */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Reason <span className="text-red-500">*</span>
-                                </label>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-widest">Reason <span className="text-rose-500">*</span></label>
                                 <textarea
                                     value={commissionReason}
                                     onChange={(e) => setCommissionReason(e.target.value)}
                                     rows={3}
-                                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-500 focus:outline-none"
-                                    placeholder="Why are you adding/subtracting commission?"
+                                    className="w-full rounded-xl border border-gray-200 px-4 py-3.5 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 font-semibold text-[15px] text-gray-900 transition-all shadow-sm outline-none bg-white resize-none"
+                                    placeholder="Reason for adjustment"
                                 />
                             </div>
 
-                            {/* Submit */}
-                            <div className="flex gap-4 pt-2">
-                                <button
-                                    onClick={() => setShowCommissionModal(false)}
-                                    className="flex-1 rounded-lg border-2 border-gray-300 py-3 font-semibold text-gray-700 hover:bg-gray-50"
-                                >
-                                    Cancel
-                                </button>
+                            <div className="flex gap-4 pt-4">
+                                <button onClick={() => setShowCommissionModal(false)} className="flex-1 rounded-xl bg-gray-100 py-4 font-bold text-gray-600 hover:bg-gray-200 transition-colors">Cancel</button>
                                 <button
                                     onClick={handleCommissionSubmit}
-                                    className={`flex-1 rounded-lg py-3 font-semibold text-white ${commissionType === 'add' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
-                                        }`}
+                                    className={`flex-[1.5] rounded-xl py-4 font-black text-white shadow-lg transition-all hover:-translate-y-0.5 ${commissionType === 'add' ? 'bg-gradient-to-r from-emerald-500 to-green-600 shadow-green-500/30 hover:shadow-green-500/50' : 'bg-gradient-to-r from-rose-500 to-red-600 shadow-red-500/30 hover:shadow-red-500/50'}`}
                                 >
-                                    {commissionType === 'add' ? 'Add Commission' : 'Subtract Commission'}
+                                    {commissionType === 'add' ? 'Confirm Addition' : 'Confirm Deduction'}
                                 </button>
                             </div>
                         </div>
