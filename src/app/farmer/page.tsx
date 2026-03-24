@@ -6,7 +6,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import LocationTracker from '@/components/LocationTracker';
 import { WeatherService, WeatherDetails } from '@/services/weatherService';
 import { LoyaltyService } from '@/services/loyaltyService';
-import { MockBackend } from '@/lib/mockData';
+import { SupabaseService } from '@/services/supabaseService';
 import { CloudSun, MessageCircle, Notebook, LogOut, Settings, Menu, X, Globe, User as UserIcon, Wind, Droplets, CloudRain, Calendar, Award, HelpCircle, ChevronRight, Sprout } from 'lucide-react';
 import Link from 'next/link';
 
@@ -65,8 +65,9 @@ export default function FarmerDashboard() {
         { name: t('supportTickets'), icon: HelpCircle, color: 'from-rose-400 to-red-500 shadow-red-500/40', href: '/farmer/queries', action: null },
     ];
 
-    const openLedger = () => {
-        const freshUser = MockBackend.getUsers().find(u => u.id === user.id);
+    const openLedger = async () => {
+        const users = await SupabaseService.getUsers();
+        const freshUser = users.find(u => u.id === user.id);
         const link = freshUser?.ledgerLink || user.ledgerLink;
         
         if (link) {

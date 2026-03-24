@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { SupabaseService } from '@/services/supabaseService';
 import { MockBackend, User, LocationData, ProximityAlert } from '@/lib/mockData';
 import { useLanguage } from '@/context/LanguageContext';
 import { MapPin, Search, Edit, Notebook, LogOut, Globe, Settings as SettingsIcon, UserPlus, Award, Ban, Trash2, AlertTriangle, BarChart3, HelpCircle, Send, Code, Key, Menu, X, Users, MessageCircle, Map as MapIcon, ChevronRight } from 'lucide-react';
@@ -24,10 +25,10 @@ export default function AdminDashboard() {
     const [totalLoyalty, setTotalLoyalty] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const allUsers = MockBackend.getUsers().filter(u => u.role === 'farmer');
-            setFarmers(allUsers);
-            setLocations(MockBackend.getAllLocations());
+        const fetchData = async () => {
+            const allUsers = await SupabaseService.getUsers();
+            setFarmers(allUsers.filter(u => u.role === 'farmer'));
+            setLocations(await SupabaseService.getAllLocations());
 
             const currentAlerts = MockBackend.getAlerts();
             const newAlerts = currentAlerts.filter(a => !a.acknowledged);
@@ -44,13 +45,12 @@ export default function AdminDashboard() {
                 } catch (e) { console.error('Audio failed', e); }
             }
             setAlerts(newAlerts);
+        };
 
-        }, 10000); 
+        const interval = setInterval(fetchData, 10000); 
 
         // Initial setup
-        const allUsers = MockBackend.getUsers().filter(u => u.role === 'farmer');
-        setFarmers(allUsers);
-        setLocations(MockBackend.getAllLocations());
+        fetchData();
 
         // Get total loyalty across all
         const allLoyalty = LoyaltyService.getAllLoyalty();
@@ -79,17 +79,17 @@ export default function AdminDashboard() {
         return farmers.find(f => f.id === userId)?.adminNotes || 'No notes found.';
     };
 
-    const handleBlockFarmer = (farmer: User) => {
+    const handleBlockFarmer = async (farmer: User) => {
         const newStatus: 'active' | 'blocked' = farmer.status === 'active' ? 'blocked' : 'active';
         const updatedFarmer: User = { ...farmer, status: newStatus };
-        MockBackend.updateUser(updatedFarmer);
+        await SupabaseService.updateUser(updatedFarmer);
         setFarmers(prev => prev.map(f => f.id === farmer.id ? updatedFarmer : f));
         setFarmerToBlock(null);
     };
 
-    const handleDeleteFarmer = (farmer: User) => {
+    const handleDeleteFarmer = async (farmer: User) => {
         const updatedFarmer: User = { ...farmer, status: 'deleted' };
-        MockBackend.updateUser(updatedFarmer);
+        await SupabaseService.updateUser(updatedFarmer);
         const updatedList = farmers.filter(f => f.id !== farmer.id);
         setFarmers(updatedList);
         setFarmerToDelete(null);
@@ -348,9 +348,9 @@ export default function AdminDashboard() {
             <CreateFarmerModal
                 isOpen={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                onSuccess={() => {
-                    const allUsers = MockBackend.getUsers().filter(u => u.role === 'farmer');
-                    setFarmers(allUsers);
+                onSuccess={async () => {
+                    const allUsers = await SupabaseService.getUsers();
+                    setFarmers(allUsers.filter(u => u.role === 'farmer'));
                     setShowCreateModal(false);
                 }}
             />

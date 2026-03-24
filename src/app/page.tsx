@@ -26,9 +26,10 @@ export default function LoginPage() {
     }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!login(credential, password)) {
+    const success = await login(credential, password);
+    if (!success) {
       setError('Invalid credentials. Please try again.');
       return;
     }

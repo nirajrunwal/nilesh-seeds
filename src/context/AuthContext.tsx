@@ -2,13 +2,14 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, MockBackend } from '@/lib/mockData';
+import { User } from '@/lib/mockData';
+import { SupabaseService } from '@/services/supabaseService';
 import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
     user: User | null;
-    login: (credential: string, psw: string) => boolean;
-    register: (user: User) => void;
+    login: (credential: string, psw: string) => Promise<boolean>;
+    register: (user: User) => Promise<void>;
     logout: () => void;
     isLoading: boolean;
 }
@@ -21,9 +22,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
     useEffect(() => {
-        // Initialize mock DB
-        MockBackend.init();
-
         // Check for existing session
         const session = localStorage.getItem('ns_session');
         if (session) {
@@ -32,8 +30,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    const login = (credential: string, psw: string) => {
-        const foundUser = MockBackend.login(credential, psw);
+    const login = async (credential: string, psw: string): Promise<boolean> => {
+        setIsLoading(true);
+        const foundUser = await SupabaseService.login(credential, psw);
+        
         if (foundUser) {
             setUser(foundUser);
             localStorage.setItem('ns_session', JSON.stringify(foundUser));
@@ -41,17 +41,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (foundUser.role === 'admin') router.push('/admin');
             else if (foundUser.role === 'employee') router.push('/employee');
             else router.push('/farmer');
+            setIsLoading(false);
             return true;
         }
+        setIsLoading(false);
         return false;
     };
 
-    const register = (newUser: User) => {
-        MockBackend.addUser(newUser);
-        // Auto login after register
-        setUser(newUser);
-        localStorage.setItem('ns_session', JSON.stringify(newUser));
-        router.push('/farmer');
+    const register = async (newUser: User) => {
+        setIsLoading(true);
+        const createdUser = await SupabaseService.addUser(newUser);
+        
+        if (createdUser) {
+            setUser(createdUser as any);
+            localStorage.setItem('ns_session', JSON.stringify(createdUser));
+            router.push('/farmer');
+        } else {
+            alert('Failed to register user to Supabase Cloud.');
+        }
+        setIsLoading(false);
     };
 
     const logout = () => {
