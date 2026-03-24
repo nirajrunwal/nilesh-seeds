@@ -1,4 +1,3 @@
-
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
@@ -46,22 +45,30 @@ const translations: Record<Language, Record<string, string>> = {
         rainy: 'Rainy',
         cloudy: 'Cloudy',
 
-        // Communication
-        chat: 'Chat',
-        video: 'Video Call',
-        call: 'Voice Call',
-        voiceCall: 'Voice Call',
-        videoCall: 'Video Call',
-
-        // Farmer Features
-        ledger: 'Ledger',
+        // New UI Translations
+        whatsappSupport: 'WhatsApp Support',
+        loyaltyPoints: 'Loyalty Points',
+        supportTickets: 'Support Tickets',
+        ledger: 'Ledger/Khata',
         myProfile: 'My Profile',
         profile: 'Profile',
         commission: 'Commission',
+        earnings: 'Earnings',
         prescriptions: 'Prescriptions',
         myPrescriptions: 'My Prescriptions',
         location: 'Location',
         myLocation: 'My Location',
+        quickActions: 'Quick Actions',
+        profileDetails: 'Profile Details',
+        fullName: 'Full Name',
+        phoneNumber: 'Phone Number',
+        emailAddress: 'Email Address',
+        accountStatus: 'Account Status',
+        totalAssigned: 'Total Assigned',
+        trackCommission: 'Track Commission',
+        gpsTracking: 'GPS Tracking',
+        preferences: 'Preferences',
+        yourTotalLoyaltyPoints: 'Your Total Loyalty Points',
 
         // Prescriptions
         prescriptionDetails: 'Prescription Details',
@@ -87,18 +94,26 @@ const translations: Record<Language, Record<string, string>> = {
         offline: 'Offline',
         farmers: 'Farmers',
         employees: 'Employees',
+        totLoyalty: 'Tot. Loyalty',
         locationHistory: 'Location History',
         developer: 'Developer Options',
+        newFarmer: 'New Farmer',
+        analytics: 'Analytics',
+        queries: 'Queries',
+        broadcast: 'Broadcast',
+        messageViaWhatsapp: 'Message via WhatsApp',
 
         // Employee
         assignedFarmers: 'Assigned Farmers',
         myFarmers: 'My Farmers',
-
+        totalFarmers: 'Total Farmers',
+        
         // Status
         active: 'Active',
         inactive: 'Inactive',
         pending: 'Pending',
         completed: 'Completed',
+        blocked: 'Blocked',
 
         // Units
         kg: 'kg',
@@ -135,7 +150,7 @@ const translations: Record<Language, Record<string, string>> = {
         farmerDashboard: 'किसान डैशबोर्ड',
 
         // Weather
-        weather: 'मौसम',
+        weather: 'मौसम जानकारी',
         temperature: 'तापमान',
         humidity: 'नमी',
         forecast: 'पूर्वानुमान',
@@ -145,22 +160,30 @@ const translations: Record<Language, Record<string, string>> = {
         rainy: 'बारिश',
         cloudy: 'बादल',
 
-        // Communication
-        chat: 'चैट',
-        video: 'वीडियो कॉल',
-        call: 'वॉइस कॉल',
-        voiceCall: 'वॉइस कॉल',
-        videoCall: 'वीडियो कॉल',
-
-        // Farmer Features
-        ledger: 'खाता',
+        // New UI Translations
+        whatsappSupport: 'WhatsApp सहायता',
+        loyaltyPoints: 'लॉयल्टी प्वॉइंट्स',
+        supportTickets: 'सहायता टिकट',
+        ledger: 'खाता / बही',
         myProfile: 'मेरी प्रोफाइल',
         profile: 'प्रोफाइल',
         commission: 'कमीशन',
-        prescriptions: 'प्रिस्क्रिप्शन',
+        earnings: 'कमाई',
+        prescriptions: 'प्रिस्क्रिप्शन / दवा पर्ची',
         myPrescriptions: 'मेरे प्रिस्क्रिप्शन',
         location: 'स्थान',
         myLocation: 'मेरा स्थान',
+        quickActions: 'त्वरित कार्य',
+        profileDetails: 'प्रोफाइल विवरण',
+        fullName: 'पूरा नाम',
+        phoneNumber: 'फ़ोन नंबर',
+        emailAddress: 'ईमेल पता',
+        accountStatus: 'खाता स्थिति',
+        totalAssigned: 'कुल नियुक्त',
+        trackCommission: 'कमीशन पर नज़र रखें',
+        gpsTracking: 'जीपीएस ट्रैकिंग',
+        preferences: 'वरीयताएँ',
+        yourTotalLoyaltyPoints: 'आपके कुल लॉयल्टी प्वॉइंट्स',
 
         // Prescriptions
         prescriptionDetails: 'प्रिस्क्रिप्शन विवरण',
@@ -173,8 +196,8 @@ const translations: Record<Language, Record<string, string>> = {
         total: 'कुल',
         instructions: 'निर्देश',
         notes: 'टिप्पणियाँ',
-        createdBy: 'द्वारा बनाया',
-        createdOn: 'बनाया गया',
+        createdBy: 'द्वारा बनाया गया',
+        createdOn: 'बनाने की तिथि',
         newPrescription: 'नया प्रिस्क्रिप्शन',
         createPrescription: 'प्रिस्क्रिप्शन बनाएं',
         viewPrescriptions: 'प्रिस्क्रिप्शन देखें',
@@ -182,22 +205,30 @@ const translations: Record<Language, Record<string, string>> = {
         // Admin
         mapView: 'मानचित्र',
         searchFarmer: 'किसान का नाम खोजें...',
-        live: 'लाइव',
+        live: 'ऑनलाइन (लाइव)',
         offline: 'ऑफलाइन',
         farmers: 'किसान',
         employees: 'कर्मचारी',
-        locationHistory: 'स्थान इतिहास',
+        totLoyalty: 'कुल लॉयल्टी',
+        locationHistory: 'स्थान का इतिहास',
         developer: 'डेवलपर विकल्प',
+        newFarmer: 'नया किसान',
+        analytics: 'एनालिटिक्स',
+        queries: 'प्रश्न',
+        broadcast: 'संदेश प्रसारण',
+        messageViaWhatsapp: 'WhatsApp के माध्यम से संदेश भेजें',
 
         // Employee
         assignedFarmers: 'सौंपे गए किसान',
         myFarmers: 'मेरे किसान',
+        totalFarmers: 'कुल किसान',
 
         // Status
         active: 'सक्रिय',
         inactive: 'निष्क्रिय',
         pending: 'लंबित',
         completed: 'पूर्ण',
+        blocked: 'अवरुद्ध',
 
         //Units
         kg: 'किलो',
@@ -218,7 +249,7 @@ const translations: Record<Language, Record<string, string>> = {
         language: 'भाषा',
         settings: 'सेटिंग्ज',
         search: 'शोधा',
-        save: 'जतन करा',
+        save: 'सेव्ह करा',
         cancel: 'रद्द करा',
         confirm: 'पुष्टी करा',
         delete: 'हटवा',
@@ -234,32 +265,40 @@ const translations: Record<Language, Record<string, string>> = {
         farmerDashboard: 'शेतकरी डॅशबोर्ड',
 
         // Weather
-        weather: 'हवामान',
+        weather: 'हवामान माहिती',
         temperature: 'तापमान',
         humidity: 'आर्द्रता',
         forecast: 'अंदाज',
         currentLocation: 'सध्याचे स्थान',
-        partlyCloudy: 'ढगाळ वातावरण',
-        sunny: 'सनी',
+        partlyCloudy: 'अंशतः ढगाळ',
+        sunny: 'ऊन',
         rainy: 'पाऊस',
         cloudy: 'ढगाळ',
 
-        // Communication
-        chat: 'चॅट',
-        video: 'व्हिडिओ कॉल',
-        call: 'व्हॉइस कॉल',
-        voiceCall: 'व्हॉइस कॉल',
-        videoCall: 'व्हिडिओ कॉल',
-
-        // Farmer Features
-        ledger: 'खाते',
+        // New UI Translations
+        whatsappSupport: 'WhatsApp सपोर्ट',
+        loyaltyPoints: 'लॉयल्टी पॉईंट्स',
+        supportTickets: 'मदत तिकीट',
+        ledger: 'खाते / नोंदवही',
         myProfile: 'माझी प्रोफाइल',
         profile: 'प्रोफाइल',
         commission: 'कमिशन',
-        prescriptions: 'प्रिस्क्रिप्शन',
+        earnings: 'कमाई',
+        prescriptions: 'प्रिस्क्रिप्शन / औषधांची चिठ्ठी',
         myPrescriptions: 'माझे प्रिस्क्रिप्शन',
         location: 'स्थान',
         myLocation: 'माझे स्थान',
+        quickActions: 'जलद कृती',
+        profileDetails: 'प्रोफाइल तपशील',
+        fullName: 'पूर्ण नाव',
+        phoneNumber: 'फोन नंबर',
+        emailAddress: 'ईमेल पत्ता',
+        accountStatus: 'खाते स्थिती',
+        totalAssigned: 'एकूण नियुक्त',
+        trackCommission: 'कमिशन मागोवा घ्या',
+        gpsTracking: 'जीपीएस ट्रॅकिंग',
+        preferences: 'प्राधान्ये',
+        yourTotalLoyaltyPoints: 'तुमचे एकूण लॉयल्टी पॉईंट्स',
 
         // Prescriptions
         prescriptionDetails: 'प्रिस्क्रिप्शन तपशील',
@@ -271,7 +310,7 @@ const translations: Record<Language, Record<string, string>> = {
         price: 'किंमत',
         total: 'एकूण',
         instructions: 'सूचना',
-        notes: 'नोट्स',
+        notes: 'नोंदी',
         createdBy: 'तयार केले',
         createdOn: 'तारीख',
         newPrescription: 'नवीन प्रिस्क्रिप्शन',
@@ -281,22 +320,30 @@ const translations: Record<Language, Record<string, string>> = {
         // Admin
         mapView: 'नकाशा',
         searchFarmer: 'शेतकऱ्याचे नाव शोधा...',
-        live: 'लाइव्ह',
-        offline: 'ऑफलाइन',
+        live: 'लाईव्ह (ऑनलाईन)',
+        offline: 'ऑफलाईन',
         farmers: 'शेतकरी',
         employees: 'कर्मचारी',
+        totLoyalty: 'एकूण लॉयल्टी',
         locationHistory: 'स्थान इतिहास',
-        developer: 'डेव्हलपर पर्याय',
+        developer: 'डेव्हेलपर पर्याय',
+        newFarmer: 'नवीन शेतकरी',
+        analytics: 'अॅनालिटिक्स',
+        queries: 'प्रश्न',
+        broadcast: 'संदेश पाठवा',
+        messageViaWhatsapp: 'WhatsApp द्वारे संदेश पाठवा',
 
         // Employee
         assignedFarmers: 'नियुक्त शेतकरी',
         myFarmers: 'माझे शेतकरी',
+        totalFarmers: 'एकूण शेतकरी',
 
         // Status
         active: 'सक्रिय',
         inactive: 'निष्क्रिय',
         pending: 'प्रलंबित',
         completed: 'पूर्ण',
+        blocked: 'ब्लॉक केलेले',
 
         // Units
         kg: 'किलो',
@@ -312,13 +359,13 @@ const translations: Record<Language, Record<string, string>> = {
 };
 
 const LanguageContext = createContext<LanguageContextType>({
-    language: 'hi',
+    language: 'en',
     setLanguage: () => { },
     t: (k) => k,
 });
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-    const [language, setLanguage] = useState<Language>('hi');
+    const [language, setLanguage] = useState<Language>('en');
 
     useEffect(() => {
         const saved = localStorage.getItem('ns_lang') as Language;

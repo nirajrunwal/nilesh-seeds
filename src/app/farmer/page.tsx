@@ -6,6 +6,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import LocationTracker from '@/components/LocationTracker';
 import { WeatherService, WeatherDetails } from '@/services/weatherService';
 import { LoyaltyService } from '@/services/loyaltyService';
+import { MockBackend } from '@/lib/mockData';
 import { CloudSun, MessageCircle, Notebook, LogOut, Settings, Menu, X, Globe, User as UserIcon, Wind, Droplets, CloudRain, Calendar, Award, HelpCircle, ChevronRight, Sprout } from 'lucide-react';
 import Link from 'next/link';
 
@@ -54,19 +55,22 @@ export default function FarmerDashboard() {
     const tiles = [
         { name: t('weather'), icon: CloudSun, color: 'from-sky-400 to-blue-600 shadow-blue-500/40', href: '#weather', action: () => setWeatherModalOpen(true) },
         {
-            name: 'WhatsApp Support',
+            name: t('whatsappSupport'),
             icon: MessageCircle,
             color: 'from-emerald-400 to-green-600 shadow-green-500/40',
             href: `https://wa.me/918208640382`,
             action: () => window.open('https://wa.me/918208640382', '_blank')
         },
-        { name: 'Loyalty Points', icon: Award, color: 'from-amber-400 to-orange-500 shadow-orange-500/40', href: '/farmer/loyalty', action: null },
-        { name: 'Support Tickets', icon: HelpCircle, color: 'from-rose-400 to-red-500 shadow-red-500/40', href: '/farmer/queries', action: null },
+        { name: t('loyaltyPoints'), icon: Award, color: 'from-amber-400 to-orange-500 shadow-orange-500/40', href: '/farmer/loyalty', action: null },
+        { name: t('supportTickets'), icon: HelpCircle, color: 'from-rose-400 to-red-500 shadow-red-500/40', href: '/farmer/queries', action: null },
     ];
 
     const openLedger = () => {
-        if (user.ledgerLink) {
-            window.open(user.ledgerLink, '_blank');
+        const freshUser = MockBackend.getUsers().find(u => u.id === user.id);
+        const link = freshUser?.ledgerLink || user.ledgerLink;
+        
+        if (link) {
+            window.open(link, '_blank');
         } else {
             alert('Ledger link not assigned yet. Please contact Admin.');
         }
@@ -161,7 +165,7 @@ export default function FarmerDashboard() {
                         <Award className="w-32 h-32" />
                     </div>
                     <div className="z-10">
-                        <h3 className="text-orange-50 font-medium text-sm mb-1">Your Total Loyalty Points</h3>
+                        <h3 className="text-orange-50 font-medium text-sm mb-1">{t('yourTotalLoyaltyPoints')}</h3>
                         <p className="text-4xl font-black drop-shadow-md">{loyaltyPoints}</p>
                     </div>
                     <Link href="/farmer/loyalty" className="z-10 bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-colors shadow-sm">
@@ -207,7 +211,7 @@ export default function FarmerDashboard() {
 
                 {/* Advanced Action Tiles Grid */}
                 <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-4 ml-1">Quick Actions</h3>
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 ml-1">{t('quickActions')}</h3>
                     <div className="grid grid-cols-2 gap-4">
                         {tiles.map((tile) => {
                             const Comp = tile.action ? 'button' : Link;

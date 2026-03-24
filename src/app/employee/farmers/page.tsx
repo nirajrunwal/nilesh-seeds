@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { EmployeeService, Employee } from '@/services/employeeService';
 import { MockBackend, User } from '@/lib/mockData';
 import { ArrowLeft, Users, MapPin, MessageCircle, Link as LinkIcon } from 'lucide-react';
@@ -10,6 +11,7 @@ import Link from 'next/link';
 
 export default function EmployeeFarmersPage() {
     const { user } = useAuth();
+    const { t } = useLanguage();
     const router = useRouter();
 
     const [employee, setEmployee] = useState<Employee | null>(null);
@@ -54,8 +56,7 @@ export default function EmployeeFarmersPage() {
                         <ArrowLeft className="h-6 w-6" />
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight drop-shadow-sm flex items-center gap-2"><Users className="w-8 h-8 opacity-80"/> Assigned Farmers</h1>
-                        <p className="text-indigo-200 text-sm font-medium mt-1">Manage farmers assigned to you</p>
+                        <h1 className="text-3xl font-black tracking-tight drop-shadow-sm flex items-center gap-2"><Users className="w-8 h-8 opacity-80"/> {t('assignedFarmers')}</h1>
                     </div>
                 </div>
             </div>
@@ -67,7 +68,7 @@ export default function EmployeeFarmersPage() {
                         <Users className="w-8 h-8 text-indigo-600" />
                     </div>
                     <div>
-                        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">Total Assigned</p>
+                        <p className="text-sm text-gray-400 font-bold uppercase tracking-widest">{t('totalAssigned')}</p>
                         <p className="text-4xl font-black text-indigo-900 drop-shadow-sm">{assignedFarmers.length}</p>
                     </div>
                 </div>
@@ -93,7 +94,7 @@ export default function EmployeeFarmersPage() {
                             <div className="space-y-3 mb-6 bg-gray-50 rounded-2xl p-4 border border-gray-100 shadow-inner">
                                 <p className="flex items-center gap-2 text-sm font-bold text-gray-700">
                                     <MapPin className="h-5 w-5 text-indigo-400" />
-                                    {farmer.village || 'No Village mentioned'}
+                                    {farmer.village || 'N/A'}
                                 </p>
                                 {farmer.crops && (
                                     <p className="flex items-center gap-2 text-sm font-bold text-gray-700">
@@ -108,7 +109,7 @@ export default function EmployeeFarmersPage() {
                                     onClick={() => window.open(`https://wa.me/918208640382?text=Hello%20Support,%20regarding%20assigned%20farmer%20${farmer.name}`, '_blank')}
                                     className="w-full flex justify-center items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 py-3.5 text-sm font-bold text-white shadow-md shadow-green-500/30 hover:shadow-lg hover:-translate-y-0.5 transition-all"
                                 >
-                                    <MessageCircle className="h-5 w-5" /> Message Support via WA
+                                    <MessageCircle className="h-5 w-5" /> {t('whatsappSupport')}
                                 </button>
                             </div>
                         </div>
