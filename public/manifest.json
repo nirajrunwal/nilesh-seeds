@@ -3,9 +3,15 @@
   "short_name": "NileshSeeds",
   "description": "Premium Agricultural Retailer and Farmer Communication Application",
   "start_url": "/",
+  "id": "/?source=pwa",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#F3F6F8",
   "theme_color": "#16a34a",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/globe.svg",
@@ -34,5 +40,29 @@
       "form_factor": "wide"
     }
   ],
-  "categories": ["business", "productivity", "agriculture"]
+  "categories": ["business", "productivity", "agriculture"],
+  "shortcuts": [
+    {
+      "name": "Live Farmer Dashboard",
+      "url": "/farmer"
+    },
+    {
+      "name": "Support",
+      "url": "/farmer/queries"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "protocol_handlers": [
+    {
+      "protocol": "web+seeds",
+      "url": "/?action=%s"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }

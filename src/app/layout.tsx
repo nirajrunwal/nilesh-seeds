@@ -18,6 +18,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Nilesh Seeds - Agricultural Management",
   description: "Complete agricultural management solution for farmers and administrators",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Nilesh Seeds",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +34,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#16a34a" />
       </head>
       <body
