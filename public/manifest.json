@@ -5,7 +5,7 @@
   "start_url": "/",
   "id": "/?source=pwa",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "fullscreen"],
   "background_color": "#F3F6F8",
   "theme_color": "#16a34a",
   "orientation": "portrait",
@@ -40,7 +40,7 @@
       "form_factor": "wide"
     }
   ],
-  "categories": ["business", "productivity", "agriculture"],
+  "categories": ["business", "productivity", "agriculture", "finance"],
   "shortcuts": [
     {
       "name": "Live Farmer Dashboard",
@@ -55,7 +55,7 @@
   "related_applications": [],
   "protocol_handlers": [
     {
-      "protocol": "web+seeds",
+      "protocol": "web+nilesh",
       "url": "/?action=%s"
     }
   ],
@@ -64,5 +64,43 @@
   },
   "edge_side_panel": {
     "preferred_width": 400
-  }
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/csv": [".csv"],
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "widgets": [
+    {
+      "name": "Farming Stats",
+      "description": "View live farming stats",
+      "tag": "farming_stats",
+      "template_url": "/widgets/template.html",
+      "ms_ac_holographic_extension": {
+        "experience": "hologram"
+      }
+    }
+  ],
+  "note_taking": {
+    "new_note_url": "/farmer/queries?new=true"
+  },
+  "scope_extensions": [
+    {
+      "origin": "*.vercel.app"
+    }
+  ]
 }
