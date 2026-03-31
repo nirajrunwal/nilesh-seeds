@@ -11,14 +11,7 @@
   "navigationColor": "#16a34a",
   "backgroundColor": "#F3F6F8",
   "enableNotifications": true,
-  "shortcuts": [
-    {
-      "name": "Farmer Dashboard",
-      "short_name": "Farmer",
-      "url": "/farmer",
-      "iconUrl": "https://nilesh-seeds.vercel.app/icon-192x192.png"
-    }
-  ],
+  "shortcuts": [],
   "webManifestUrl": "https://nilesh-seeds.vercel.app/manifest.json",
   "fallbackType": "customtabs",
   "features": {
