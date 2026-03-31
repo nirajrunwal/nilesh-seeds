@@ -1,0 +1,38 @@
+name: Build Android APK
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
+
+      - name: Generate Keystore
+        run: |
+          keytool -genkey -v -keystore android.keystore -alias nileshseeds -keyalg RSA -keysize 2048 -validity 10000 -storepass "nilesh123" -keypass "nilesh123" -dname "cn=Nilesh Seeds, ou=Agri, o=Nilesh, c=IN"
+
+      - name: Build APK with Bubblewrap
+        run: |
+          yes | bubblewrap build --manifest=twa-manifest.json
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: nilesh123
+          BUBBLEWRAP_KEY_PASSWORD: nilesh123
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nilesh-seeds-apk
+          path: ./*.apk

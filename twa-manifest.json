@@ -1,0 +1,38 @@
+{
+  "packageId": "com.nileshseeds.app",
+  "host": "nilesh-seeds.vercel.app",
+  "name": "Nilesh Seeds",
+  "launcherName": "NileshSeeds",
+  "description": "Nilesh Seeds agricultural app",
+  "startUrl": "/",
+  "iconUrl": "https://nilesh-seeds.vercel.app/icon-512x512.png",
+  "maskableIconUrl": "https://nilesh-seeds.vercel.app/icon-512x512.png",
+  "themeColor": "#16a34a",
+  "navigationColor": "#16a34a",
+  "backgroundColor": "#F3F6F8",
+  "enableNotifications": true,
+  "shortcuts": [
+    {
+      "name": "Live Farmer Dashboard",
+      "short_name": "Farmer",
+      "url": "/farmer",
+      "icon": "https://nilesh-seeds.vercel.app/icon-192x192.png"
+    }
+  ],
+  "webManifestUrl": "https://nilesh-seeds.vercel.app/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "location": true,
+    "playBilling": false
+  },
+  "alpha": {
+    "enabled": false
+  },
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "nileshseeds"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "orientation": "portrait"
+}
