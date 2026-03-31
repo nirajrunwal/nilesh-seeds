@@ -1,45 +1,35 @@
 name: Build Android APK
-
 on:
   push:
-    branches: [ "main", "master" ]
-  workflow_dispatch: # Allows you to run this manually from the Actions tab
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # FIX 1: Ensure Java 17 is installed. Modern Gradle versions will fail with exit code 1 if Java 11 or 8 is used.
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+          distribution: temurin
+          java-version: 17
 
-      # FIX 2: Give the Gradle wrapper execution permissions. Without this, Linux (GitHub Actions) blocks the build.
-      - name: Grant execute permission for gradlew
-        run: |
-          if [ -f "./gradlew" ]; then chmod +x ./gradlew; fi
-          if [ -f "./android/gradlew" ]; then chmod +x ./android/gradlew; fi
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-      # FIX 3: Run the build with --stacktrace so if it fails again, it tells us EXACTLY which file is missing
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Build Debug APK
-        run: |
-          if [ -d "android" ]; then
-            cd android
-            ./gradlew assembleDebug --stacktrace
-          else
-            ./gradlew assembleDebug --stacktrace
-          fi
+        working-directory: ./android
+        run: gradle wrapper --gradle-version 8.5 && chmod +x gradlew && ./gradlew assembleDebug
 
-      # Upload the generated APK so you can download it directly from GitHub
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: '**/*.apk'
+          name: nilesh-seeds-apk
+          path: android/app/build/outputs/apk/debug/*.apk
