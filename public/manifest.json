@@ -1,22 +1,38 @@
-
 {
-  "name": "Nilesh Seeds",
+  "name": "Nilesh Seeds Dashboard",
   "short_name": "NileshSeeds",
-  "description": "Agriculture Retailer Communication App",
+  "description": "Premium Agricultural Retailer and Farmer Communication Application",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#F3F6F8",
   "theme_color": "#16a34a",
   "icons": [
     {
       "src": "/globe.svg",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
       "src": "/globe.svg",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "/globe.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/globe.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["business", "productivity", "agriculture"]
 }
