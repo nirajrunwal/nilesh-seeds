@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup JDK 17
@@ -18,36 +18,21 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Bubblewrap
-        run: npm install -g @bubblewrap/cli
-
-      - name: Generate Keystore
+      - name: Make Gradle wrapper executable
+        working-directory: ./android
         run: |
-          keytool -genkey -v -keystore android.keystore -alias nileshseeds -keyalg RSA -keysize 2048 -validity 10000 -storepass "nilesh123" -keypass "nilesh123" -dname "cn=Nilesh Seeds, ou=Agri, o=Nilesh, c=IN"
+          gradle wrapper
+          chmod +x gradlew
 
-      - name: Init and Build TWA
-        run: |
-          bubblewrap init --manifest="https://nilesh-seeds.vercel.app/manifest.json" --directory=./twa-output <<EOF
-          nilesh123
-          nilesh123
-          EOF
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
+      - name: Build Debug APK
+        working-directory: ./android
+        run: ./gradlew assembleDebug
 
-      - name: Find and Upload APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: nilesh-seeds-apk
-          path: |
-            ./twa-output/*.apk
-            ./*.apk
-            ./twa-output/app/build/outputs/apk/**/*.apk
-          if-no-files-found: warn
+          path: android/app/build/outputs/apk/debug/*.apk
